@@ -1,0 +1,14 @@
+sudo apt update
+sudo apt install tcpdump nmap
+
+mkdir ~/scan_results
+
+mkdir ~/scan_results/syn_scan
+
+sudo tcpdump host target_ip_addr -w ~/scan_results/syn_scan/packets
+
+sudo nmap -sS -Pn -p- -T4 -vv --reason -oN ~/scan_results/syn_scan/nmap.results target_ip_addr
+
+less ~/scan_results/syn_scan/nmap.results
+
+sudo tcpdump -nn -r ~/scan_results/syn_scan/packets 'src target_ip_addr and tcp[tcpflags] & tcp-syn != 0' | less
